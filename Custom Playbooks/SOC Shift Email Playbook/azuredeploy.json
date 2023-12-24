@@ -134,14 +134,14 @@
                             "type":  "ApiConnection",
                             "inputs":  {
                                 "body":  {
-                                    "Body":  "\u003cp\u003e\u003cspan style=\"font-size: 18px\"\u003e\u003cstrong\u003eHere is the list of Incidents that were handled in the shift:\u003cbr\u003e\n\u003cbr\u003e\n\u003c/strong\u003e\u003c/span\u003e\u003cspan style=\"font-size: 18px\"\u003e\u003cstrong\u003e@{base64ToString(body('Run_query_and_visualize_results')?['attachmentContent'])}\u003c/strong\u003e\u003c/span\u003e\u003cspan style=\"font-size: 18px\"\u003e\u003cstrong\u003e\u003c/strong\u003e\u003c/span\u003e\u003c/p\u003e",
+                                    "Body":  "\u003cp\u003e\u003cspan style=\"font-size: 18px\"\u003e\u003cstrong\u003eSOC Shift Report:\u003cbr\u003e\n\u003cbr\u003e\n\u003c/strong\u003e\u003c/span\u003e\u003cspan style=\"font-size: 18px\"\u003e\u003cstrong\u003e@{base64ToString(body('Run_query_and_visualize_results')?['attachmentContent'])}\u003c/strong\u003e\u003c/span\u003e\u003cspan style=\"font-size: 18px\"\u003e\u003cstrong\u003e\u003c/strong\u003e\u003c/span\u003e\u003c/p\u003e",
                                     "Importance":  "High",
-                                    "Subject":  "Shift Incident Report",
+                                    "Subject":  "SOC Shift Report",
                                     "To":  "@parameters('EmailAddress')"
                                 },
                                 "host":  {
                                     "connection":  {
-                                        "name":  "@parameters('$connections')['office365']['connectionId']"
+                                        "name":  "@parameters('$connections')['office365_1']['connectionId']"
                                     }
                                 },
                                 "method":  "post",
