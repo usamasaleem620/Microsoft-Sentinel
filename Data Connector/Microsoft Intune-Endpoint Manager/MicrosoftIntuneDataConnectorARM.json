@@ -1,0 +1,151 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "defaultValue": "[resourceGroup().location]",
+            "type": "String"
+        },
+        "workspaceName": {
+            "type": "String"
+        }
+    },
+    "variables": {
+        "destinationName": "clv2ws1",
+        "connectorDefinitionName": "MicrosoftIntuneDataConnector",
+        "connectorName": "Microsoft Intune-Endpoint Management",
+        "connectorDefinitionFullName": "[concat(parameters('workspaceName'),'/Microsoft.SecurityInsights/', variables('connectorDefinitionName'))]",
+        "connectorFullName": "[concat(parameters('workspaceName'),'/Microsoft.SecurityInsights/', variables('connectorName'))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/providers/dataConnectorDefinitions",
+            "apiVersion": "2022-09-01-preview",
+            "name": "[variables('connectorDefinitionFullName')]",
+            "kind": "Customizable",
+            "properties": {
+                "connectorUiConfig": {
+                    "title": "Microsoft Intune-Endpoint Management",
+                    "publisher": "Microsoft",
+                    "descriptionMarkdown": "Connect to Microsoft Intune logs for endpoint management via Diagnostic Logs. Microsoft Intune allows you to efficiently manage a wide array of endpoints, including Windows 10/11, Android, iOS, macOS, Chrome, and Linux Ubuntu, ensuring comprehensive device management. For enhanced security, it is advisable to monitor alterations, onboarding activities, and device compliance.",
+                    "lastDataReceivedInfoBalloon": "If no new data has been received in the last 14 days, the connector will display as being \"not connected.\" When the connector will receive data, the \"connected\" status will return.",
+                    "graphQueries": [
+                        {
+                            "metricName": "Total data received Intune Audit Logs",
+                            "legend": "IntuneAuditLogs",
+                            "baseQuery": "IntuneAuditLogs"
+                        },
+                        {
+                            "metricName": "Total data received Intune Device ComplianceOrg",
+                            "legend": "IntuneDeviceComplianceOrg",
+                            "baseQuery": "IntuneDeviceComplianceOrg"
+                        },
+                        {
+                            "metricName": "Total data received Intune Devices",
+                            "legend": "IntuneDevices",
+                            "baseQuery": "IntuneDevices"
+                        },
+                        {
+                            "metricName": "Total data received Intune Operational Logs",
+                            "legend": "IntuneOperationalLogs",
+                            "baseQuery": "IntuneOperationalLogs"
+                        }
+                    ],
+                    "sampleQueries": [
+                        {
+                            "description": "Intune Audit logs",
+                            "query": "IntuneAuditLogs\n            | sort by TimeGenerated"
+                        },
+                        {
+                            "description": "Intune Device ComplianceOrg",
+                            "query": "IntuneDeviceComplianceOrg\n            | sort by TimeGenerated"
+                        },
+                        {
+                            "description": "Intune Device Logs",
+                            "query": "IntuneDevices\n            | sort by TimeGenerated"
+                        },
+                        {
+                            "description": "Intune Operational Logs",
+                            "query": "IntuneOperationalLogs\n            | sort by TimeGenerated"
+                        }
+                    ],
+                    "connectivityCriteria": [
+                        {
+                            "type": "IsConnectedQuery",
+                            "value": [
+                                "IntuneAuditLogs\n            | summarize LastLogReceived = max(TimeGenerated)\n            | project IsConnected = LastLogReceived > ago(7d)",
+                                "IntuneDeviceComplianceOrg\n            | summarize LastLogReceived = max(TimeGenerated)\n            | project IsConnected = LastLogReceived > ago(7d)",
+                                "IntuneDevices\n            | summarize LastLogReceived = max(TimeGenerated)\n            | project IsConnected = LastLogReceived > ago(7d)",
+                                "IntuneOperationalLogs\n            | summarize LastLogReceived = max(TimeGenerated)\n            | project IsConnected = LastLogReceived > ago(7d)"
+                            ]
+                        }
+                    ],
+                    "dataTypes": [
+                        {
+                            "name": "IntuneAuditLogs",
+                            "lastDataReceivedQuery": "IntuneAuditLogs\n            | summarize Time = max(TimeGenerated)\n            | where isnotempty(Time)"
+                        },
+                        {
+                            "name": "IntuneDeviceComplianceOrg",
+                            "lastDataReceivedQuery": "IntuneDeviceComplianceOrg\n            | summarize Time = max(TimeGenerated)\n            | where isnotempty(Time)"
+                        },
+                        {
+                            "name": "IntuneDevices",
+                            "lastDataReceivedQuery": "IntuneDevices\n            | summarize Time = max(TimeGenerated)\n            | where isnotempty(Time)"
+                        },
+                        {
+                            "name": "IntuneOperationalLogs",
+                            "lastDataReceivedQuery": "IntuneOperationalLogs\n            | summarize Time = max(TimeGenerated)\n            | where isnotempty(Time)"
+                        }
+                    ],
+                    "availability": {
+                        "status": 2,
+                        "isPreview": false
+                    },
+                    "permissions": {
+                        "resourceProvider": [
+                            {
+                                "provider": "Microsoft.OperationalInsights/workspaces",
+                                "permissionsDisplayText": "read and write permissions.",
+                                "providerDisplayName": "Workspace",
+                                "scope": "Workspace",
+                                "requiredPermissions": {
+                                    "read": true,
+                                    "write": true,
+                                    "delete": true
+                                }
+                            }
+                        ],
+                        "customs": [
+                            {
+                                "name": "Permission for Microsoft Intune tenant",
+                                "description": "Global Administrator or Intune Service Administrator"
+                            }
+                        ]
+                    },
+                    "instructionSteps": [
+                        {
+                            "title": "Connect Microsoft Intune to Microsoft Sentinel",
+                            "description": "Enable Diagnostic Logs on Microsoft Intune",
+                            "instructions": []
+                        },
+                        {
+                            "title": "Open Microsoft Intune Portal:",
+                            "description": "Navigate to Reports:\n    \n1.  Select **+ Add diagnostic setting**\n2.  In the **Diagnostic setting** blade:\n  -   Type a **Name**, within the **Diagnostics settings** name field.\n  -   Select **Send to Log Analytics**.\n  -   Choose the log destination workspace.\n  -   Select the categories that you want to analyze (recommended: AuditLogs, OperationalLogs, DeviceComplianceOrg, Devices)\n  -   Click **Save**."
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "outputs": {
+        "connectorDefinitionName": {
+            "type": "String",
+            "value": "[variables('connectorDefinitionName')]"
+        },
+        "connectorName": {
+            "type": "String",
+            "value": "[variables('connectorName')]"
+        }
+    }
+}
