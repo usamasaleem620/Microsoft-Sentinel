@@ -1,1 +1,3 @@
-# Microsoft Intune with Microsoft Sentinel
+# Microsoft Intune Data Connector
+
+This is microsoft intune data connector
