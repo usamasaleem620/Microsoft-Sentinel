@@ -3,7 +3,6 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "location": {
-            "defaultValue": "[resourceGroup().location]",
             "type": "String"
         },
         "workspaceName": {
@@ -25,7 +24,7 @@
             "properties": {
                 "connectorUiConfig": {
                     "title": "Microsoft Intune-Endpoint Management",
-                    "publisher": "Microsoft",
+                    "publisher": "Usama Saleem",
                     "descriptionMarkdown": "Connect to Microsoft Intune logs for endpoint management via Diagnostic Logs. Microsoft Intune allows you to efficiently manage a wide array of endpoints, including Windows 10/11, Android, iOS, macOS, Chrome, and Linux Ubuntu, ensuring comprehensive device management. For enhanced security, it is advisable to monitor alterations, onboarding activities, and device compliance.",
                     "lastDataReceivedInfoBalloon": "If no new data has been received in the last 14 days, the connector will display as being \"not connected.\" When the connector will receive data, the \"connected\" status will return.",
                     "graphQueries": [
