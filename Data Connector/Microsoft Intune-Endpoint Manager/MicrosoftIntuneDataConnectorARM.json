@@ -47,6 +47,11 @@
                             "metricName": "Total data received Intune Operational Logs",
                             "legend": "IntuneOperationalLogs",
                             "baseQuery": "IntuneOperationalLogs"
+                        },
+                        {
+                            "metricName": "Total data received Windows365 Audit Logs",
+                            "legend": "Windows365AuditLogs",
+                            "baseQuery": "Windows365AuditLogs"
                         }
                     ],
                     "sampleQueries": [
@@ -65,6 +70,10 @@
                         {
                             "description": "Intune Operational Logs",
                             "query": "IntuneOperationalLogs\n            | sort by TimeGenerated"
+                        },
+                        {
+                            "description": "Windows365 Audit Logs",
+                            "query": "Windows365AuditLogs\n            | sort by TimeGenerated"
                         }
                     ],
                     "connectivityCriteria": [
@@ -74,7 +83,8 @@
                                 "IntuneAuditLogs\n            | summarize LastLogReceived = max(TimeGenerated)\n            | project IsConnected = LastLogReceived > ago(7d)",
                                 "IntuneDeviceComplianceOrg\n            | summarize LastLogReceived = max(TimeGenerated)\n            | project IsConnected = LastLogReceived > ago(7d)",
                                 "IntuneDevices\n            | summarize LastLogReceived = max(TimeGenerated)\n            | project IsConnected = LastLogReceived > ago(7d)",
-                                "IntuneOperationalLogs\n            | summarize LastLogReceived = max(TimeGenerated)\n            | project IsConnected = LastLogReceived > ago(7d)"
+                                "IntuneOperationalLogs\n            | summarize LastLogReceived = max(TimeGenerated)\n            | project IsConnected = LastLogReceived > ago(7d)",
+                                "Windows365AuditLogs\n            | summarize LastLogReceived = max(TimeGenerated)\n            | project IsConnected = LastLogReceived > ago(7d)"
                             ]
                         }
                     ],
@@ -94,6 +104,10 @@
                         {
                             "name": "IntuneOperationalLogs",
                             "lastDataReceivedQuery": "IntuneOperationalLogs\n            | summarize Time = max(TimeGenerated)\n            | where isnotempty(Time)"
+                        },
+                        {
+                            "name": "Windows365AuditLogs",
+                            "lastDataReceivedQuery": "Windows365AuditLogs\n            | summarize Time = max(TimeGenerated)\n            | where isnotempty(Time)"
                         }
                     ],
                     "availability": {
@@ -116,7 +130,7 @@
                         ],
                         "customs": [
                             {
-                                "name": "Permission for Microsoft Intune tenant",
+                                "name": "Permission for Microsoft Intune Tenant",
                                 "description": "Global Administrator or Intune Service Administrator"
                             }
                         ]
@@ -129,7 +143,7 @@
                         },
                         {
                             "title": "Open Microsoft Intune Portal:",
-                            "description": "Navigate to Reports:\n    \n1.  Select **+ Add diagnostic setting**\n2.  In the **Diagnostic setting** blade:\n  -   Type a **Name**, within the **Diagnostics settings** name field.\n  -   Select **Send to Log Analytics**.\n  -   Choose the log destination workspace.\n  -   Select the categories that you want to analyze (recommended: AuditLogs, OperationalLogs, DeviceComplianceOrg, Devices)\n  -   Click **Save**."
+                            "description": "Navigate to Reports:\n    \n1.  Select **+ Add diagnostic setting**\n2.  In the **Diagnostic setting** blade:\n  -   Type a **Name**, within the **Diagnostics settings** name field.\n  -   Select **Send to Log Analytics**.\n  -   Choose the log destination workspace.\n  -   Select the categories that you want to analyze (recommended: AuditLogs, OperationalLogs, DeviceComplianceOrg, Devices, Windows365AuditLogs)\n  -   Click **Save**."
                         }
                     ]
                 }
