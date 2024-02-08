@@ -1,4 +1,4 @@
-#Check the compliance state of the last 30 days:
+//Check the compliance state of the last 30 days:
 
 IntuneDeviceComplianceOrg
 | where TimeGenerated >= ago(30d)
