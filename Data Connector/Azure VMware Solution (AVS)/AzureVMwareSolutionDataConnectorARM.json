@@ -1,0 +1,101 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "String"
+        },
+        "workspaceName": {
+            "type": "String"
+        }
+    },
+    "variables": {
+        "connectorDefinitionName": "AzureVMwareSolution",
+        "connectorName": "Azure VMware Solution",
+        "connectorDefinitionFullName": "[concat(parameters('workspaceName'),'/Microsoft.SecurityInsights/', variables('connectorDefinitionName'))]",
+        "connectorFullName": "[concat(parameters('workspaceName'),'/Microsoft.SecurityInsights/', variables('connectorName'))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/providers/dataConnectorDefinitions",
+            "apiVersion": "2022-09-01-preview",
+            "name": "[variables('connectorDefinitionFullName')]",
+            "kind": "Customizable",
+            "properties": {
+                "connectorUiConfig": {
+                    "title": "Azure VMware Solution",
+                    "publisher": "Microsoft",
+                    "descriptionMarkdown": "Connect to Azure VMware Solution syslog via Diagnostic Logs. Azure VMware Solution enables you to seamlessly run VMware workloads natively on Azure, ensuring a consistent and scalable environment. To enhance security and operational efficiency, it's important to monitor system logs, resource utilization, and configuration changes.",
+                    "lastDataReceivedInfoBalloon": "If no new data has been received in the last 14 days, the connector will display as being \"not connected.\" When the connector will receive data, the \"connected\" status will return.",
+                    "graphQueries": [
+                        {
+                            "metricName": "Total data received AVS Syslogs",
+                            "legend": "AVSSyslog",
+                            "baseQuery": "AVSSyslog"
+                        }
+                    ],
+                    "sampleQueries": [
+                        {
+                            "description": "AVS Syslog",
+                            "query": "AVSSyslog\n            | sort by TimeGenerated"
+                        }
+                    ],
+                    "connectivityCriteria": [
+                        {
+                            "type": "IsConnectedQuery",
+                            "value": [
+                                "AVSSyslog\n            | summarize LastLogReceived = max(TimeGenerated)\n            | project IsConnected = LastLogReceived > ago(7d)"
+                            ]
+                        }
+                    ],
+                    "dataTypes": [
+                        {
+                            "name": "AVSSyslog",
+                            "lastDataReceivedQuery": "AVSSyslog\n            | summarize Time = max(TimeGenerated)\n            | where isnotempty(Time)"
+                        }
+                    ],
+                    "availability": {
+                        "status": 2,
+                        "isPreview": false
+                    },
+                    "permissions": {
+                        "resourceProvider": [
+                            {
+                                "provider": "Microsoft.OperationalInsights/workspaces",
+                                "permissionsDisplayText": "read and write permissions.",
+                                "providerDisplayName": "Workspace",
+                                "scope": "Workspace",
+                                "requiredPermissions": {
+                                    "read": true,
+                                    "write": true,
+                                    "delete": true
+                                }
+                            }
+                        ]
+                    },
+                    "instructionSteps": [
+                        {
+                            "title": "Connect Azure VMware Solution to Microsoft Sentinel",
+                            "description": "Go to each AVS resource type and choose your AVS.",
+                            "instructions": []
+                        },
+                        {
+                            "title": "",
+                            "description": "Inside your AVS resource:\n\n1.  Select **Diagnostic logs.​**\n2.  Select **+ Add diagnostic setting.​**\n3.  In the **Diagnostic setting** blade:\n    -   Type a **Name**.\n    -   Select **Send to Log Analytics**.\n    -   Choose the log destination workspace.​\n    -   Select the categories that you want to analyze (recommended: VMware Syslog).​\n    -   Click **Save**."
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "outputs": {
+        "connectorDefinitionName": {
+            "type": "String",
+            "value": "[variables('connectorDefinitionName')]"
+        },
+        "connectorName": {
+            "type": "String",
+            "value": "[variables('connectorName')]"
+        }
+    }
+}
