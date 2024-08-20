@@ -11,7 +11,7 @@
     },
     "variables": {
         "connectorDefinitionName": "AzureVMwareSolution",
-        "connectorName": "Azure VMware Solution",
+        "connectorName": "Azure VMware Solution (AVS)",
         "connectorDefinitionFullName": "[concat(parameters('workspaceName'),'/Microsoft.SecurityInsights/', variables('connectorDefinitionName'))]",
         "connectorFullName": "[concat(parameters('workspaceName'),'/Microsoft.SecurityInsights/', variables('connectorName'))]"
     },
@@ -23,13 +23,13 @@
             "kind": "Customizable",
             "properties": {
                 "connectorUiConfig": {
-                    "title": "Azure VMware Solution",
+                    "title": "Azure VMware Solution (AVS)",
                     "publisher": "Microsoft",
                     "descriptionMarkdown": "Connect to Azure VMware Solution syslog via Diagnostic Logs. Azure VMware Solution enables you to seamlessly run VMware workloads natively on Azure, ensuring a consistent and scalable environment. To enhance security and operational efficiency, it's important to monitor system logs, resource utilization, and configuration changes.",
                     "lastDataReceivedInfoBalloon": "If no new data has been received in the last 14 days, the connector will display as being \"not connected.\" When the connector will receive data, the \"connected\" status will return.",
                     "graphQueries": [
                         {
-                            "metricName": "Total data received AVS Syslogs",
+                            "metricName": "Total data received AVS Syslog",
                             "legend": "AVSSyslog",
                             "baseQuery": "AVSSyslog"
                         }
@@ -76,7 +76,7 @@
                     "instructionSteps": [
                         {
                             "title": "Connect Azure VMware Solution to Microsoft Sentinel",
-                            "description": "Go to each AVS resource type and choose your AVS.",
+                            "description": "Go to Azure VMware Solution and choose your AVS resource.",
                             "instructions": []
                         },
                         {
